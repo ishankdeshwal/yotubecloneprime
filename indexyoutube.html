@@ -8,7 +8,8 @@
 </head>
 <body>
     <header>
-        <input type="text" name="search-text" onchange="handleSearch(event)"><button>Search</button>
+        <input type="text" id="searchBox" name="search-text" oninput="handleSearch(event)">
+        <button onclick="handleSearchButton()">Search</button>
     </header>
     <aside>
         <a href="history.html">History</a>

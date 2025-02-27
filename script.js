@@ -1,23 +1,3 @@
-// const getData = () =>{
-//     const pr = fetch("https://youtube138.p.rapidapi.com/v2/trending", {
-//         method:"GET",
-//         headers:{
-//             "x-rapidapi-host":"youtube138.p.rapidapi.com",
-//             "x-rapidapi-key":"55488db6c3msh794b82f94cd1484p1182c2jsn8bbb8070e1cf",
-//         },
-//     });
-//     pr.then((res)=>{
-//         const pr2 = res.json();
-//         pr2.then((data)=>{
-//             console.log(data);
-//         });
-//     }).catch((err)=>{
-//         alert(err.message);
-//     });
-// };
-// getData();
-
-
 const dummyData = [
     {
         "type": "video",
@@ -5721,27 +5701,68 @@ const dummyData = [
     }
 ]
 
-const root = document.querySelector('main');
-const showUI = (list) =>{
-    list.forEach((obj) => {
-        const newCard = document.createElement("div");
-        newCard.addEventListener('click', ()=>{
-            window.open(`./video.html?id=${obj.videoId}`,"_top");
-        });
-        newCard.className='card';
-        console.log(obj.videoThumbnails[0].url);
-        newCard.innerHTML=`
-        <img src='${obj.videoThumbnails[0].url}' width="100%">
-        <h6>${obj.author}</h6>
-        <h4>${obj.title}</h4>`;
+const root = document.querySelector("main");
 
+const showUI = (list) => {
+    root.innerHTML = "";
+    list.forEach((obj, idx) => {
+        const newCard = document.createElement("div");
+        newCard.addEventListener("click", () => {
+            window.open (`./video.html?id=${obj.videoId}`, "_top");
+            history.push(obj.videoId);
+            console.log(history);
+        });
+        newCard.className = "card";
+        newCard.innerHTML = `
+            <img 
+                src='${obj.videoThumbnails[0].url}' 
+                width="100%" 
+                onmouseover='handleHover(event, ${idx})'
+            >
+            <h6>${obj.author}</h6>
+            <h4>${obj.title}</h4>
+        `;
         root.appendChild(newCard);
     });
+
     
 };
 
-const handleHover = (e, idx) => {
+window.onload = () => {
+    showUI(dummyData);
+};
 
+
+
+const handleHover = (e, idx) => {
+    // const lastImage = dummyData[idx].videoThumbnails.pop();
+    // e.target.src = lastImage.url;
+};
+
+const searchBox = document.querySelector("#searchBox");
+
+if(searchBox.value==""){
+    
 }
+
+function handleSearch(event) {
+    const query = event.target.value.toLowerCase();
+    console.log(query);
+    filterAndDisplay(query);
+}
+
+function handleSearchButton() {
+    const query = searchBox.value.toLowerCase();
+    filterAndDisplay(query);
+}
+
+function filterAndDisplay(query) {
+    const filteredData = dummyData.filter(video =>
+        video.title.toLowerCase().trim().includes(query) ||
+        video.author.toLowerCase().trim().includes(query)
+    );
+    console.log(filteredData);
+    showUI(filteredData);
+};
 
 showUI(dummyData);

@@ -6,23 +6,42 @@
     <title>Document</title>
 </head>
 <body>
-    <div id="iframe-container">
+    <a href="index.html">HOME</a>
+    <div id="iframe-container"></div>
 
-    </div>
     <script>
-        const root=document.getElementById('iframe-container')
-        const history=localStorage.getItem('yt_history')
-        const historyArray=JSON.parse(history)
-        historyArray.array.forEach(videoId => {
-            const newCard=document.createElement('div')
-            newCard.innerHTML(`
-               <iframe 
-               width:"550" 
-               height:"335"
-               src:"<iframe width="662" height="372" src="https://www.youtube.com/embed/${videoId}" title="Courier Boy Se Panga ! | Taarak Mehta Ka Ooltah Chashmah | तारक मेहता का उल्टा चश्मा" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>"
-            `)
-            root.appendChild(newCard)
-        });
+        const historyText = localStorage.getItem("yt_history") || "[]";
+        let historyArray = JSON.parse(historyText).reverse();
+
+        const root = document.getElementById('iframe-container');
+
+        function renderVideos() {
+            root.innerHTML = ""; // Clear existing content
+            historyArray.forEach((videoId, index) => {
+                const newCard = document.createElement('div');
+                newCard.innerHTML = `
+                    <iframe 
+                        width="448" 
+                        height="252" 
+                        src="https://www.youtube.com/embed/${videoId}" 
+                        title="YouTube video player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        referrerpolicy="strict-origin-when-cross-origin" 
+                        allowfullscreen >
+                    </iframe>
+                    <button onclick="deleteVideo(${index})">Delete</button>
+                `;
+                root.appendChild(newCard);
+            });
+        }
+
+        function deleteVideo(index) {
+            historyArray.splice(index, 1); // Remove video from arra
+            localStorage.setItem("yt_history", JSON.stringify(historyArray.reverse())); // Update localStorage
+            renderVideos(); // Re-render list
+        }
+        renderVideos(); // Initial render
     </script>
 </body>
 </html>

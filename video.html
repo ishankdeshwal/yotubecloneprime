@@ -1,18 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>YouTube Video & Comments</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
+
+<style>
+    .comment-buttons {
+        display: none;
+    }
+    .single-comment {
+        margin: 10px 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    .likeDislike {
+        display: flex;
+        gap: 10px;
+        cursor: pointer;
+    }
+</style>
+
 <body>
-    <iframe width="560" height="315" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <a href='index.html'>HOME</a>
+    <div id="currVideo"></div>
 
     <script>
-        const iframe = document.querySelector('iframe')
-        const [a, videoId] = window.location.search.split('=');
-        iframe.src = `https://www.youtube.com/embed/${videoId}`
-       
+        const videoContainer = document.querySelector('#currVideo');
+        const commentArr = [];
+        const searchText = window.location.search;
+        const videoId = searchText.split('=')[1];
+
+        const showVideo = () => {
+            const newVideo = document.createElement('div');
+            newVideo.innerHTML = `
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+                <div class="comments-input">
+                    <input type="text" id="comment-box" placeholder="Write a comment...">
+                    <div class="comment-buttons">
+                        <button id="cancel-btn">Cancel</button>
+                        <button id="comment-btn">Comment</button>
+                    </div>
+                </div>
+
+                <div class="comments-container"></div>
+            `;
+            videoContainer.appendChild(newVideo);
+
+            // Select elements after adding them to the DOM
+            const commentButtons = document.querySelector('.comment-buttons');
+            const commentBox = document.querySelector('#comment-box');
+            const commentContainer = document.querySelector('.comments-container');
+
+            // Show comment buttons when input is clicked
+            commentBox.addEventListener("click", () => {
+                commentButtons.style.display = 'block';
+            });
+
+            // Hide buttons when "Cancel" is clicked
+            document.querySelector('#cancel-btn').addEventListener("click", () => {
+                commentButtons.style.display = 'none';
+                commentBox.value = "";
+            });
+
+            // Handle comment submission
+            document.querySelector('#comment-btn').addEventListener("click", () => {
+
+                const inputComment = commentBox.value.trim();
+                if (!inputComment) {
+                    alert("Comment cannot be empty!");
+                    return;
+                }
+
+                commentArr.push(inputComment);
+
+                // Create comment block
+                const commentWrapper = document.createElement('div');
+                commentWrapper.classList.add('single-comment');
+
+                // Add comment text
+                const commentText = document.createElement('p');
+                commentText.textContent = inputComment;
+                commentWrapper.appendChild(commentText);
+
+                // Like/Dislike section
+                const likeDislike = document.createElement('div');
+                likeDislike.classList.add('likeDislike');
+                likeDislike.innerHTML = `
+                    <i class="fa-regular fa-thumbs-up"></i>
+                    <i class="fa-regular fa-thumbs-down"></i>
+                    <p>Reply</p>
+                `;
+                commentWrapper.appendChild(likeDislike);
+
+                // Append to container
+                commentContainer.appendChild(commentWrapper);
+
+                // Clear input
+                commentBox.value = "";
+            });
+        };
+
+        showVideo();
+
+        // Store history in localStorage
+        const youtubeHistory = JSON.parse(localStorage.getItem('yt_history')) || [];
+        if (!youtubeHistory.includes(videoId)) {
+            youtubeHistory.push(videoId);
+            localStorage.setItem("yt_history", JSON.stringify(youtubeHistory));
+        }
+        console.log(commentArr);
+
+        // const comment = JSON.parse(localStorage.getItem('commentArr')) || [];
+
     </script>
+    
 </body>
+
 </html>
