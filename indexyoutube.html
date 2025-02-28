@@ -3,21 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>YouTube</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet"> 
 </head>
 <body>
+
     <header>
-        <input type="text" id="searchBox" name="search-text" oninput="handleSearch(event)">
-        <button onclick="handleSearchButton()">Search</button>
+        <div class="logo">
+            <i class="ri-youtube-fill"></i> MyTube 
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchBox" name="search-text" placeholder="Search videos..." oninput="handleSearch(event)">
+            <button onclick="handleSearchButton()"><i class="ri-search-line"></i></button>
+        </div>
+        <div class="profile-icon">
+            <i class="ri-user-line"></i>
+        </div>
     </header>
+
     <aside>
-        <a href="history.html">History</a>
+        <a href="indexyoutube.html"><i class="ri-home-4-line"></i> Home</a>
+        <a href="#"><i class="ri-fire-line"></i> Trending</a>
+        <a href="#"><i class="ri-play-list-line"></i> Subscriptions</a>
+        <a href="#"><i class="ri-folder-line"></i> Library</a>
+        <a href="history.html"><i class="ri-history-line"></i> History</a>
     </aside>
+
     <main>
-        <!-- <div class="card"></div> -->
+        <div class="video-container">
+            <div class="card">
+                <img src="https://via.placeholder.com/300" alt="Video Thumbnail">
+                <div class="video-info">
+                    <h3>Sample Video 1</h3>
+                    <p>Channel Name • 1.2M views • 2 days ago</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://via.placeholder.com/300" alt="Video Thumbnail">
+                <div class="video-info">
+                    <h3>Sample Video 2</h3>
+                    <p>Channel Name • 500K views • 1 week ago</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://via.placeholder.com/300" alt="Video Thumbnail">
+                <div class="video-info">
+                    <h3>Sample Video 3</h3>
+                    <p>Channel Name • 3M views • 1 month ago</p>
+                </div>
+            </div>
+        </div>
     </main>
-    
+
     <script src="script.js"></script>
 </body>
 </html>

@@ -3,22 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>YouTube Watch History</title>
+    <style>
+        * {
+            font-family: Arial, sans-serif;
+        }
+        body {
+            text-align: center;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+            background-color: #ff0000;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        #iframe-container {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .video-card {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        iframe {
+            border-radius: 5px;
+        }
+        .delete-btn {
+            margin-top: 8px;
+            padding: 8px 12px;
+            border: none;
+            background-color: #ff4d4d;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .delete-btn:hover {
+            background-color: #cc0000;
+        }
+    </style>
 </head>
 <body>
-    <a href="index.html">HOME</a>
+    <a href="indexyoutube.html"> HOME</a>
+
     <div id="iframe-container"></div>
 
     <script>
         const historyText = localStorage.getItem("yt_history") || "[]";
-        let historyArray = JSON.parse(historyText).reverse();
+        let historyArray = JSON.parse(historyText);
+
+        
+        historyArray.reverse();
 
         const root = document.getElementById('iframe-container');
 
         function renderVideos() {
-            root.innerHTML = ""; // Clear existing content
+            root.innerHTML = ""; 
+
+            if (historyArray.length === 0) {
+                root.innerHTML = "<p>No history available.</p>";
+                return;
+            }
+
             historyArray.forEach((videoId, index) => {
                 const newCard = document.createElement('div');
+                newCard.classList.add("video-card");
+
                 newCard.innerHTML = `
                     <iframe 
                         width="448" 
@@ -26,22 +88,22 @@
                         src="https://www.youtube.com/embed/${videoId}" 
                         title="YouTube video player" 
                         frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                        referrerpolicy="strict-origin-when-cross-origin" 
-                        allowfullscreen >
+                       >
                     </iframe>
-                    <button onclick="deleteVideo(${index})">Delete</button>
+                    <button class="delete-btn" onclick="deleteVideo(${index})">Delete</button>
                 `;
+
                 root.appendChild(newCard);
             });
         }
 
         function deleteVideo(index) {
-            historyArray.splice(index, 1); // Remove video from arra
-            localStorage.setItem("yt_history", JSON.stringify(historyArray.reverse())); // Update localStorage
-            renderVideos(); // Re-render list
+            historyArray.splice(index, 1);
+            localStorage.setItem("yt_history", JSON.stringify([...historyArray].reverse())); 
+            renderVideos();
         }
-        renderVideos(); // Initial render
+
+        renderVideos();
     </script>
 </body>
 </html>
